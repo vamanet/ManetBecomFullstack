@@ -31,10 +31,12 @@ Route::middleware('guest')->group(function () {
         ->name('password.email');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/userdashboard', [DashboardController::class, 'index'])
-        ->name('userdashboard');
+Route::get('/userdashboard', [DashboardController::class, 'index'])
+    ->name('userdashboard');
 
+Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
+
+Route::get('/dashboard', [DashboardController::class, 'dashboardOne']);

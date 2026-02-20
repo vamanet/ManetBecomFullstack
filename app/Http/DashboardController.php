@@ -12,4 +12,8 @@ class DashboardController extends Controller
             'user' => $request->user(),
         ]);
     }
+    public function dashboardOne()
+    {
+        return view('dashboardOne/dashboard');
+    }
 }

@@ -80,7 +80,7 @@
   </AuthLayout>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AuthLayout from '@/components/AuthLayout.vue'
@@ -94,7 +94,7 @@ const form = reactive({
   remember: false,
 })
 
-const errors = reactive<Record<string, string[]>>({
+const errors = reactive({
   general: '',
   email: [],
   password: [],

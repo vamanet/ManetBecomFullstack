@@ -1,14 +1,20 @@
 <template>
   <div id="app" class="min-h-screen bg-gray-100">
-    
-    <main>
+    <MainLayoutDashboard v-if="!isGuestRoute">
       <router-view />
-    </main>
+    </MainLayoutDashboard>
+    <router-view v-else />
   </div>
 </template>
 
-<script setup lang="ts">
-import { onMounted } from 'vue'
+<script setup>
+import { computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import MainLayoutDashboard from '@/layout/MainLayoutDashboard.vue'
+
+const route = useRoute()
+
+const isGuestRoute = computed(() => route.meta.requiresGuest)
 
 onMounted(() => {
   console.log('✓ App.vue mounted successfully')
