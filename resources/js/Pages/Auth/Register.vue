@@ -1,92 +1,139 @@
 <template>
   <AuthLayout>
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div class="w-full max-w-md space-y-8">
-        <div>
-          <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Create your account
-          </h2>
+    <div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      <div class="w-100" style="max-width: 420px;">
+        <!-- Card -->
+        <div class="card shadow-lg border-0 rounded-4">
+          <!-- Header -->
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <div class="display-6 fw-bold text-primary mb-2">FullStack</div>
+              <h2 class="h4 fw-bold text-dark">Create Account</h2>
+              <p class="text-muted small">Join us today and get started</p>
+            </div>
+
+            <!-- Error Alert -->
+            <div v-if="errors.general" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="bi bi-exclamation-circle-fill me-2"></i>
+              {{ errors.general }}
+              <button type="button" class="btn-close" @click="errors.general = ''"></button>
+            </div>
+
+            <!-- Form -->
+            <form @submit.prevent="register">
+              <!-- Full Name -->
+              <div class="mb-3">
+                <label for="name" class="form-label fw-semibold">Full Name</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0">
+                    <i class="bi bi-person text-primary"></i>
+                  </span>
+                  <input
+                    id="name"
+                    v-model="form.name"
+                    type="text"
+                    required
+                    class="form-control border-0 ps-0"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div v-if="errors.name" class="invalid-feedback d-block mt-1">
+                  {{ errors.name[0] }}
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="mb-3">
+                <label for="email" class="form-label fw-semibold">Email Address</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0">
+                    <i class="bi bi-envelope text-primary"></i>
+                  </span>
+                  <input
+                    id="email"
+                    v-model="form.email"
+                    type="email"
+                    required
+                    class="form-control border-0 ps-0"
+                    placeholder="you@example.com"
+                  />
+                </div>
+                <div v-if="errors.email" class="invalid-feedback d-block mt-1">
+                  {{ errors.email[0] }}
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div class="mb-3">
+                <label for="password" class="form-label fw-semibold">Password</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0">
+                    <i class="bi bi-lock text-primary"></i>
+                  </span>
+                  <input
+                    id="password"
+                    v-model="form.password"
+                    type="password"
+                    required
+                    class="form-control border-0 ps-0"
+                    placeholder="••••••••"
+                  />
+                </div>
+                <div v-if="errors.password" class="invalid-feedback d-block mt-1">
+                  {{ errors.password[0] }}
+                </div>
+              </div>
+
+              <!-- Confirm Password -->
+              <div class="mb-4">
+                <label for="password_confirmation" class="form-label fw-semibold">Confirm Password</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0">
+                    <i class="bi bi-lock-check text-primary"></i>
+                  </span>
+                  <input
+                    id="password_confirmation"
+                    v-model="form.password_confirmation"
+                    type="password"
+                    required
+                    class="form-control border-0 ps-0"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                :disabled="loading"
+                class="btn btn-primary w-100 fw-semibold py-2 rounded-3 mb-3"
+              >
+                <span v-if="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                {{ loading ? 'Creating account...' : 'Sign Up' }}
+              </button>
+
+              <!-- Divider -->
+              <div class="d-flex align-items-center my-4">
+                <hr class="flex-grow-1" />
+                <span class="px-3 text-muted small">or</span>
+                <hr class="flex-grow-1" />
+              </div>
+
+              <!-- Sign In Link -->
+              <p class="text-center text-muted mb-0">
+                Already have an account?
+                <router-link to="/login" class="fw-semibold text-decoration-none">
+                  Sign in here
+                </router-link>
+              </p>
+            </form>
+          </div>
         </div>
 
-        <form class="mt-8 space-y-6" @submit.prevent="register">
-          <div v-if="errors.general" class="rounded-md bg-red-50 p-4">
-            <p class="text-sm text-red-800">{{ errors.general }}</p>
-          </div>
-
-          <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              id="name"
-              v-model="form.name"
-              type="text"
-              required
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-              placeholder="John Doe"
-            />
-            <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name[0] }}</p>
-          </div>
-
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">
-              Email address
-            </label>
-            <input
-              id="email"
-              v-model="form.email"
-              type="email"
-              required
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-              placeholder="you@example.com"
-            />
-            <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email[0] }}</p>
-          </div>
-
-          <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              id="password"
-              v-model="form.password"
-              type="password"
-              required
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-              placeholder="••••••••"
-            />
-            <p v-if="errors.password" class="mt-1 text-sm text-red-600">{{ errors.password[0] }}</p>
-          </div>
-
-          <div>
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
-            <input
-              id="password_confirmation"
-              v-model="form.password_confirmation"
-              type="password"
-              required
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-              placeholder="••••••••"
-            />
-          </div>
-
-          <button
-            type="submit"
-            :disabled="loading"
-            class="group relative w-full flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-          >
-            {{ loading ? 'Creating account...' : 'Sign up' }}
-          </button>
-
-          <p class="text-center text-sm text-gray-600">
-            Already have an account?
-            <router-link to="/login" class="font-medium text-blue-600 hover:text-blue-500">
-              Sign in
-            </router-link>
-          </p>
-        </form>
+        <!-- Footer Text -->
+        <p class="text-center text-white-50 small mt-4">
+          © 2026 FullStack. All rights reserved.
+        </p>
       </div>
     </div>
   </AuthLayout>
