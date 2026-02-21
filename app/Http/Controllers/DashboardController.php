@@ -16,4 +16,8 @@ class DashboardController extends Controller
     {
         return view('app');
     }
+    public function profile(Request $request): View
+    {
+        return view('app');
+    }
 }

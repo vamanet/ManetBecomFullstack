@@ -40,3 +40,4 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'dashboardOne']);
+Route::get('/profile', [DashboardController::class, 'profile']);

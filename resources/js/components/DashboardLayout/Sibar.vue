@@ -1,50 +1,69 @@
 <template>
-  <div class="sidebar bg-light border-end vh-100 p-3">
-    <div class="sidebar-header mb-4">
-      <h6 class="text-uppercase text-muted fw-semibold mb-3">Main Menu</h6>
+  <div class="sidebar">
+    <!-- Header/Logo -->
+    <div class="sidebar-header">
+      <div class="logo-section">
+        <i class="bi bi-cloud"></i>
+        <span class="logo-text">Drive.</span>
+      </div>
     </div>
 
-    <nav class="nav flex-column gap-1">
-      <a class="nav-link active d-flex align-items-center rounded px-3 py-2" href="/dashboard">
-         <i class="bi bi-bag-dash-fill"></i>
-        <span>Dashboard</span>
+    <!-- Main Navigation -->
+    <nav class="nav flex-column">
+      <a class="nav-link active" href="/dashboard">
+        <i class="bi bi-cloud"></i>
+        <span>My Drive</span>
       </a>
 
-      <a class="nav-link d-flex align-items-center rounded px-3 py-2" href="#">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-folder me-2" viewBox="0 0 16 16">
-          <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19z"/>
-        </svg>
-        <span>Projects</span>
+      <a class="nav-link" href="#">
+        <i class="bi bi-folder"></i>
+        <span>Shared Files</span>
       </a>
 
-      <a class="nav-link d-flex align-items-center rounded px-3 py-2" href="#">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people me-2" viewBox="0 0 16 16">
-          <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-        </svg>
-        <span>Team</span>
+      <a class="nav-link" href="#">
+        <i class="bi bi-file-earmark"></i>
+        <span>File Requests</span>
       </a>
 
-      <a class="nav-link d-flex align-items-center rounded px-3 py-2" href="#">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-graph-up me-2" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07z"/>
-        </svg>
-        <span>Analytics</span>
+      <a class="nav-link" href="#">
+        <i class="bi bi-star"></i>
+        <span>Starred</span>
       </a>
 
-      <hr class="my-3" />
-
-      <h6 class="text-uppercase text-muted fw-semibold mb-3 small">Settings</h6>
-
-      <a class="nav-link d-flex align-items-center rounded px-3 py-2" href="/userdashboard">
-         <i class="bi bi-person"></i>
-         <span>Profile</span>
+      <a class="nav-link" href="#">
+        <i class="bi bi-trash"></i>
+        <span>Trash</span>
       </a>
 
-      <a class="nav-link d-flex align-items-center rounded px-3 py-2" href="#">
-            <i class="bi bi-gear"></i>
-        <span>Settings</span>
+      <a class="nav-link" href="#">
+        <i class="bi bi-bar-chart"></i>
+        <span>Statistics</span>
+      </a>
+
+      <a class="nav-link" href="#">
+        <i class="bi bi-list-check"></i>
+        <span>Task</span>
       </a>
     </nav>
+
+    <!-- Storage Section -->
+    <div class="storage-section">
+      <div class="storage-info">
+        <i class="bi bi-cloud"></i>
+        <span>Storage</span>
+        <span class="storage-percent">27%</span>
+      </div>
+      <div class="storage-bar">
+        <div class="storage-used"></div>
+      </div>
+      <p class="storage-text">277/100 GB Used</p>
+    </div>
+
+    <!-- Logout -->
+    <a class="nav-link logout-link" href="#">
+      <i class="bi bi-box-arrow-right"></i>
+      <span>Logout</span>
+    </a>
   </div>
 </template>
 
@@ -53,27 +72,149 @@
 
 <style scoped>
 .sidebar {
-  min-width: 250px;
-  position: sticky;
+  min-width: 280px;
+  position: fixed;
   top: 0;
+  left: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #1a2940 0%, #2d3e50 100%);
+  overflow-y: auto;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1rem;
+  color: white;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-header {
+  margin-bottom: 3rem;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 0.5rem;
+}
+
+.logo-section i {
+  color: #ffc107;
+  font-size: 1.75rem;
+}
+
+.logo-text {
+  color: white;
+  letter-spacing: 0.05em;
+}
+
+nav.nav {
+  flex: 1;
+  gap: 0.5rem;
 }
 
 .nav-link {
-  color: #6c757d;
-  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #b0b8c1;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-link i {
+  font-size: 1.25rem;
+  width: 1.5rem;
+  text-align: center;
 }
 
 .nav-link:hover {
-  background-color: #e9ecef;
-  color: #495057;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding-left: 1.25rem;
 }
 
 .nav-link.active {
-  background-color: #0d6efd;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-left: 3px solid #ffc107;
+  padding-left: calc(1rem - 3px);
+}
+
+.storage-section {
+  margin: 2rem 0;
+  padding: 1.25rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+}
+
+.storage-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: #b0b8c1;
+  font-size: 0.875rem;
+}
+
+.storage-info i {
+  color: #ffc107;
+}
+
+.storage-percent {
+  margin-left: auto;
+  font-weight: 600;
   color: white;
 }
 
-.nav-link.active:hover {
-  background-color: #0b5ed7;
+.storage-bar {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.storage-used {
+  height: 100%;
+  width: 27%;
+  background: linear-gradient(90deg, #ffc107 0%, #ff9800 100%);
+  border-radius: 3px;
+}
+
+.storage-text {
+  font-size: 0.75rem;
+  color: #7d8a99;
+  margin: 0;
+}
+
+.logout-link {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 </style>

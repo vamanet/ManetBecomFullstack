@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
                 <h2 class="mb-0">Dashboard Overview</h2>
                 <button class="btn btn-primary">Create Report</button>
@@ -89,3 +89,11 @@
 
 <script setup lang="ts">
 </script>
+
+<style scoped>
+.container-fluid{
+    margin-left: 265px;
+    width: 80%;
+    margin-top: 10px;
+}
+</style>

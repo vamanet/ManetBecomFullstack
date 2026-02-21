@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <AppLayout class="container">
     <div v-if="loading" class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
@@ -110,3 +110,11 @@ onMounted(() => {
   fetchUser()
 })
 </script>
+
+<style scoped>
+.container {
+    margin-left: 265px;
+    width: 80%;
+    margin-top: 10px;
+}
+</style>
