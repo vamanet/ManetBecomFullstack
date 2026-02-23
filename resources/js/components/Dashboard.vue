@@ -24,7 +24,9 @@ async function handleLogout() {
     await auth.logout();
     router.push('/login');
   } catch (error) {
-    alert('Logout failed.');
+    console.error('Logout error:', error);
+    // Still redirect to login even if API call fails
+    router.push('/login');
   } finally {
     loading.value = false;
   }

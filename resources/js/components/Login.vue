@@ -36,7 +36,7 @@
             <input v-model="password" type="password" placeholder="Password"  class="input-field"/>
             </div>
             <div class="btn">
-               <button @click="handleLogin" :disabled="loading">
+               <button @click="handleLogin" :disabled="loading" class="button1">
                   {{ loading ? 'Logging in...' : 'Login' }}
                  </button>
                 <router-link to="/register">
@@ -79,28 +79,27 @@ const password = ref('');
 const message = ref('');
 const loading = ref(false);
 
-async function handleLogin() {
+async function handleLogin(e) {
+  e.preventDefault();
   message.value = '';
   loading.value = true;
 
   try {
-    const user = await apiRequest('/api/login', {
+    const response = await apiRequest('/api/login', {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
       },
-      credentials: 'include',
       body: JSON.stringify({
         email: email.value,
         password: password.value,
       }),
     });
 
-    auth.setUser(user);
+    auth.setUser(response);
     router.push('/');
   } catch (error) {
-    message.value = error.message || 'Login failed';
+    message.value = error.message || 'Invalid email or password';
   } finally {
     loading.value = false;
   }
@@ -142,7 +141,7 @@ button {
   padding-left: 2em;
   padding-right: 2em;
   padding-bottom: 0.4em;
-  background-color: #171717;
+  background-color: #575151;
   border-radius: 25px;
   transition: 0.4s ease-in-out;
 }
@@ -186,7 +185,7 @@ button {
   border: none;
   outline: none;
   color: white;
-  background-color: #171717;
+  background-color: #514b4b;
   box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
 }
 
@@ -225,7 +224,7 @@ button {
 }
 
 .button1:hover {
-  background-color: black;
+  background-color: rgb(77, 68, 68);
   color: white;
 }
 
@@ -242,7 +241,7 @@ button {
 }
 
 .button2:hover {
-  background-color: black;
+  background-color: rgb(76, 71, 71);
   color: white;
 }
 

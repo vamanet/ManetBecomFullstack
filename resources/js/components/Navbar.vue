@@ -1,21 +1,4 @@
-<script setup>
-import { ref } from 'vue';
-import { useAuthStore } from '@/stores/auth';
-import { useRouter } from 'vue-router';
 
-const auth = useAuthStore();
-const router = useRouter();
-const isUserMenuOpen = ref(false);
-
-const handleLogout = async () => {
-  await auth.logout();
-  router.push('/login');
-};
-
-const toggleUserMenu = () => {
-  isUserMenuOpen.value = !isUserMenuOpen.value;
-};
-</script>
 
 <template>
   <nav class="fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-50">
@@ -34,22 +17,19 @@ const toggleUserMenu = () => {
           <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <span class="text-white font-bold text-sm">A</span>
           </div>
-          <span class="text-xl font-semibold text-gray-800">AppName</span>
+          <span class="text-xl font-semibold text-gray-800">FoodShop</span>
         </router-link>
       </div>
 
       <!-- Navigation Links (Desktop) -->
-      <div class="hidden lg:flex items-center gap-6">
+      <!-- <div class="hidden lg:flex items-center gap-6">
         <router-link
           to="/"
           class="text-gray-600 hover:text-indigo-600 transition-colors font-medium"
         >
           Dashboard
         </router-link>
-        <a href="#" class="text-gray-600 hover:text-indigo-600 transition-colors font-medium">
-          Settings
-        </a>
-      </div>
+      </div> -->
 
       <!-- User Menu -->
       <div class="relative">
@@ -100,3 +80,28 @@ const toggleUserMenu = () => {
     </div>
   </nav>
 </template>
+<script setup>
+import { ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
+
+const auth = useAuthStore();
+const router = useRouter();
+const isUserMenuOpen = ref(false);
+
+async function handleLogout() {
+  isUserMenuOpen.value = false;
+  try {
+    await auth.logout();
+    router.push('/login');
+  } catch (error) {
+    console.error('Logout error:', error);
+    // Still redirect to login even if API call fails
+    router.push('/login');
+  }
+}
+
+const toggleUserMenu = () => {
+  isUserMenuOpen.value = !isUserMenuOpen.value;
+};
+</script>

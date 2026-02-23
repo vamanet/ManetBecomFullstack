@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { apiRequest } from '@/services/api';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -10,7 +11,7 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    // Normalize API response
+    // Set user from API response
     setUser(response) {
       this.user = response?.data ?? null;
       // Save to localStorage for persistence
@@ -47,14 +48,17 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async logout() {
-      await fetch('/api/logout', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { Accept: 'application/json' },
-      });
-
-      this.user = null;
-      localStorage.removeItem('user');
+      try {
+        await apiRequest('/api/logout', {
+          method: 'POST',
+        });
+      } catch (error) {
+        console.error('Logout error:', error);
+      } finally {
+        // Always clear user data even if API call fails
+        this.user = null;
+        localStorage.removeItem('user');
+      }
     },
   },
 });
