@@ -97,7 +97,7 @@ async function handleLogin(e) {
     });
 
     auth.setUser(response);
-    router.push('/');
+    router.push('/dashboardfood');
   } catch (error) {
     message.value = error.message || 'Invalid email or password';
   } finally {

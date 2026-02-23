@@ -20,19 +20,24 @@ const handleSidebarCollapse = (collapsed) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-vh-100 bg-light">
     <!-- Navbar -->
-    <Navbar @toggle-sidebar="toggleSidebar" />
+    <Navbar @toggle-sidebar="toggleSidebar" :sidebar-collapsed="isSidebarCollapsed" />
 
     <!-- Sidebar -->
     <Sidebar :is-open="isSidebarOpen" @close="closeSidebar" @toggle-collapse="handleSidebarCollapse" />
 
     <!-- Main Content -->
     <main
-      class="pt-16 min-h-screen transition-all duration-300"
-      :class="isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'"
+      class="transition-all"
+      :style="{ 
+        paddingTop: '72px',
+        marginLeft: isSidebarCollapsed ? '80px' : '256px',
+        transition: 'margin-left 0.3s ease'
+      }"
+      style="min-height: 100vh;"
     >
-      <div class="p-6 lg:p-8">
+      <div class="container-fluid p-4">
         <slot />
       </div>
     </main>

@@ -4,13 +4,15 @@ import Register from '@/components/Register.vue';
 import Dashboard from '@/components/Dashboard.vue';
 import Users from '@/Pages/Users.vue';
 import DashboardFood from '@/Pages/DashboardFood.vue';
+import Foods from '@/Pages/Foods.vue';
 import { useAuthStore } from '@/stores/auth';
 
 const routes = [
   { path: '/login', component: Login, meta: { guest: true } },
   { path: '/register', component: Register, meta: { guest: true } },
   { path: '/users', component: Users, meta: { requiresAuth: true } },
-  {path: '/dashboardfood', component: DashboardFood, meta: { requiresAuth: true } },
+  { path: '/dashboardfood', component: DashboardFood, meta: { requiresAuth: true } },
+  { path: '/foods', component: Foods, meta: { requiresAuth: true } },
   { path: '/', component: DashboardFood, meta: { requiresAuth: true } },
 ];
 
@@ -26,7 +28,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isLoggedIn) {
     next('/login');
   } else if (to.meta.guest && isLoggedIn) {
-    next('/');
+    next('/dashboardfood');
   } else {
     next();
   }

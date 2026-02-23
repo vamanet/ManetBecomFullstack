@@ -1,81 +1,81 @@
 
 
 <template>
-  <nav class="fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-50">
-    <div class="flex items-center justify-between h-full px-4">
+  <nav 
+    class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm fixed-top"
+    :style="{
+      marginLeft: sidebarCollapsed ? '80px' : '256px',
+      width: sidebarCollapsed ? 'calc(100% - 80px)' : 'calc(100% - 256px)',
+      transition: 'margin-left 0.3s ease, width 0.3s ease'
+    }"
+  >
+    <div class="container-fluid">
       <!-- Logo & Brand -->
-      <div class="flex items-center gap-3">
-        <button
-          class="p-2 rounded-lg hover:bg-gray-100 lg:hidden"
-          @click="$emit('toggle-sidebar')"
-        >
-          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-        <router-link to="/" class="flex items-center gap-2">
-          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-sm">A</span>
-          </div>
-          <span class="text-xl font-semibold text-gray-800">FoodShop</span>
-        </router-link>
-      </div>
-
-      <!-- Navigation Links (Desktop) -->
-      <!-- <div class="hidden lg:flex items-center gap-6">
-        <router-link
-          to="/"
-          class="text-gray-600 hover:text-indigo-600 transition-colors font-medium"
-        >
-          Dashboard
-        </router-link>
-      </div> -->
+      <button
+        class="btn btn-light d-lg-none me-2"
+        type="button"
+        @click="$emit('toggle-sidebar')"
+      >
+        <svg class="bi" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      
+      <router-link to="/" class="navbar-brand d-flex align-items-center m-2">
+        <div class="bg-primary text-white rounded d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+          <strong>F</strong>
+        </div>
+        <span class="fw-bold">FoodShop</span>
+      </router-link>
 
       <!-- User Menu -->
-      <div class="relative">
+      <div class="dropdown ms-auto">
         <button
           @click="toggleUserMenu"
-          class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          class="btn btn-light d-flex align-items-center gap-2"
+          type="button"
         >
-          <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-            <span class="text-indigo-600 font-medium text-sm">
+          <div class="bg-primary bg-opacity-25 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+            <strong class="small">
               {{ auth.user?.name?.charAt(0).toUpperCase() || 'U' }}
-            </span>
+            </strong>
           </div>
-          <div class="hidden md:block text-left">
-            <p class="text-sm font-medium text-gray-800">{{ auth.user?.name || 'User' }}</p>
-            <p class="text-xs text-gray-500">{{ auth.user?.email || 'user@example.com' }}</p>
+          <div class="text-start d-none d-md-block">
+            <div class="small fw-semibold">{{ auth.user?.name || 'User' }}</div>
+            <div class="text-muted" style="font-size: 0.75rem;">{{ auth.user?.email || 'user@example.com' }}</div>
           </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          <svg width="16" height="16" fill="currentColor" class="text-muted" viewBox="0 0 24 24">
+            <path d="M19 9l-7 7-7-7" />
           </svg>
         </button>
 
         <!-- Dropdown Menu -->
-        <div
-          v-if="isUserMenuOpen"
-          class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
-        >
-          <router-link
-            to="/profile"
-            class="flex items-center gap-2 px-4 py-2.5 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
-            @click="isUserMenuOpen = false"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            Profile
-          </router-link>
-          <button
-            @click="handleLogout"
-            class="flex items-center gap-2 w-full px-4 py-2.5 text-red-600 hover:bg-red-50 transition-colors"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Logout
-          </button>
-        </div>
+        <ul v-if="isUserMenuOpen" class="dropdown-menu dropdown-menu-end show position-absolute" style="right: 0; top: 100%; margin-top: 0.5rem;">
+          <li>
+            <router-link
+              to="/profile"
+              class="dropdown-item d-flex align-items-center gap-2"
+              @click="isUserMenuOpen = false"
+            >
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Profile
+            </router-link>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <button
+              @click="handleLogout"
+              class="dropdown-item text-danger d-flex align-items-center gap-2"
+            >
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Logout
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
@@ -88,6 +88,13 @@ import { useRouter } from 'vue-router';
 const auth = useAuthStore();
 const router = useRouter();
 const isUserMenuOpen = ref(false);
+
+const props = defineProps({
+  sidebarCollapsed: {
+    type: Boolean,
+    default: false
+  }
+});
 
 async function handleLogout() {
   isUserMenuOpen.value = false;

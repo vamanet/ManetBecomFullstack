@@ -1,0 +1,54 @@
+/* Custom Bootstrap Enhancements */
+
+/* Sidebar transitions */
+.sidebar-expanded,
+.sidebar-collapsed {
+  transition: width 0.3s ease;
+}
+
+/* Smooth navbar dropdown */
+.dropdown-menu {
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Navigation hover effects */
+.nav-link:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+}
+
+/* Responsive sidebar and navbar for mobile */
+@media (max-width: 991.98px) {
+  main {
+    margin-left: 0 !important;
+  }
+  
+  .navbar.fixed-top {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* Card hover effect */
+.card {
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Table row hover */
+.table-hover tbody tr:hover {
+  background-color: rgba(var(--bs-primary-rgb), 0.05);
+}

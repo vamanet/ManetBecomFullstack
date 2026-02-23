@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodShop - Laravel Vue SPA</title>
+    <title>FoodShop</title>
+    <link rel="icon"  href= "{{ asset('Food-Logo.jpg') }}" type="image/png">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
