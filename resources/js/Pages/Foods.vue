@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" id="foodlist">
     <div class="mb-5">
       <h1 style="font-size: 2.5rem; font-weight: 700; color: #2c3e50; margin-bottom: 0.5rem;">🍽️ Foods Menu</h1>
       <p style="color: #7f8c8d; font-size: 1rem;">Manage and organize your food items with ease</p>
@@ -19,7 +19,7 @@
     </div>
 
     <!-- Foods Grid Display -->
-    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+    <div class="row row-cols-1 row-cols-md-4 g-4 mb-5">
       <div v-if="isLoadingFoods" class="col-12">
         <div style="text-align: center; padding: 3rem; color: #7f8c8d;">
           <div class="spinner-border text-primary mb-3" role="status">
@@ -50,7 +50,7 @@
             <p class="card-text"><small class="text-muted">Size: {{ food.size }}</small></p>
             <p class="card-text"><small class="text-muted">Category: {{ food.category && food.category.name ? food.category.name : 'N/A' }}</small></p>
             <div class="d-flex justify-content-between align-items-center">
-              <strong class="text-primary" style="font-size: 1.25rem;">${{ food.price }}</strong>
+              <strong class="text-danger" style="font-size: 1.25rem;"> <span class="text-primary">KHR</span> {{ food.price }}.00</strong>
               <div class="btn-group">
                 <button class="btn btn-sm btn-outline-primary" @click="openEditModal(food)" title="Edit">
                   ✏️
@@ -146,7 +146,11 @@
                   <!-- File Upload on Left -->
                   <div class="col-md-5">
                     <div class="upload-container">
-                      <div class="upload-header">
+                      <div v-if="imagePreview" class="upload-preview">
+                        <img :src="imagePreview" alt="Preview" class="img-thumbnail" style="max-height: 200px;">
+                        <button type="button" class="btn btn-sm btn-outline-danger mt-2" @click="removeImage">Remove</button>
+                      </div>
+                      <div v-else class="upload-header">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -158,7 +162,7 @@
                         </svg>
                         <p>Browse File to upload!</p>
                       </div>
-                      <label for="file" class="upload-footer">
+                      <label v-if="!imagePreview" for="file" class="upload-footer">
                         <svg fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -181,12 +185,7 @@
                           </g>
                         </svg>
                       </label>
-                      <input id="file" type="file" @change="handleFileChange" accept="image/*">
-                    </div>
-                    <!-- Image Preview -->
-                    <div v-if="imagePreview" class="mt-3 text-center">
-                      <img :src="imagePreview" alt="Preview" class="img-thumbnail" style="max-height: 150px;">
-                      <button type="button" class="btn btn-sm btn-outline-danger ms-2" @click="removeImage">Remove</button>
+                      <input ref="fileInput" id="file" type="file" @change="handleFileChange" accept="image/*">
                     </div>
                   </div>
                 </div>
@@ -194,7 +193,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button class="btn btn-primary" type="submit" :data-bs-dismiss="closeOnSuccess ? 'modal' : null" :disabled="isSubmitting || !categories.length">
+               <button class="btn btn-primary" type="submit" :disabled="isSubmitting">
                 {{ isSubmitting ? "Saving..." : (isEditing ? "Update" : "Submit") }}
               </button>
             </div>
@@ -206,7 +205,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, onMounted } from "vue";
+import { reactive, ref, computed, onMounted, onBeforeUnmount } from "vue";
 import axios from "axios";
 import { Modal } from "bootstrap";
 
@@ -225,11 +224,12 @@ const form = reactive({
 const isSubmitting = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
-const closeOnSuccess = ref(false);
 const foods = ref([]);
 const categories = ref([]);
 const isLoadingFoods = ref(false);
 const foodModal = ref(null);
+const fileInput = ref(null);
+const modalInstance = ref(null);
 const isEditing = ref(false);
 const imagePreview = ref(null);
 const perPage = ref(12);
@@ -269,12 +269,10 @@ const removeImage = () => {
   form.image = null;
   form.image_name = "";
   imagePreview.value = null;
-  // Reset file input
-  const fileInput = document.getElementById('file');
-  if (fileInput) fileInput.value = "";
+  if (fileInput.value) fileInput.value.value = "";
 };
 
-const resetForm = () => {
+const resetForm = (clearMessages = false) => {
   form.id = null;
   form.name = "";
   form.description = "";
@@ -286,7 +284,11 @@ const resetForm = () => {
   form.image_name = "";
   imagePreview.value = null;
   isEditing.value = false;
-  closeOnSuccess.value = false;
+  if (fileInput.value) fileInput.value.value = "";
+  if (clearMessages) {
+    errorMessage.value = "";
+    successMessage.value = "";
+  }
 };
 
 const fetchFoods = async () => {
@@ -324,11 +326,11 @@ const changePage = (page) => {
 };
 
 const openAddModal = () => {
-  resetForm();
+  resetForm(true);
 };
 
 const openEditModal = (food) => {
-  resetForm();
+  resetForm(true);
   isEditing.value = true;
   form.id = food.id;
   form.name = food.name;
@@ -340,23 +342,34 @@ const openEditModal = (food) => {
   if (food.image) {
     imagePreview.value = food.image;
   }
+  if (foodModal.value) {
+    Modal.getOrCreateInstance(foodModal.value).show();
+  }
 };
 
 const closeModal = () => {
-  const modalEl = document.getElementById('foodModal');
-  if (!modalEl) return;
-  
-  const instance = Modal.getInstance(modalEl);
+  if (!foodModal.value) return;
+  const instance = Modal.getInstance(foodModal.value) || modalInstance.value;
   if (instance) {
     instance.hide();
   }
-  resetForm();
+  resetForm(true);
+  // Safety cleanup in case the backdrop gets stuck.
+  document.body.classList.remove("modal-open");
+  document.querySelectorAll(".modal-backdrop").forEach((backdrop) => backdrop.remove());
+};
+
+const handleModalHidden = () => {
+  if (!isSubmitting.value) {
+    resetForm(true);
+  }
 };
 
 const submitFood = async () => {
   isSubmitting.value = true;
   errorMessage.value = "";  
   successMessage.value = "";
+  let isSuccess = false;
 
   const formData = new FormData();
   formData.append("name", form.name);
@@ -386,22 +399,15 @@ const submitFood = async () => {
       });
       successMessage.value = "Food created successfully.";
     }
-    closeOnSuccess.value = true;
-    
-    resetForm();
     await fetchFoods();
-    
-    setTimeout(() => {
-      closeModal();
-      setTimeout(() => {
-        successMessage.value = "";
-        errorMessage.value = "";
-      }, 300);
-    }, 1000);
+    isSuccess = true;
   } catch (error) {
     errorMessage.value = error?.response?.data?.message || "Failed to save food. Check inputs.";
   } finally {
     isSubmitting.value = false;
+  }
+  if (isSuccess) {
+    closeModal();
   }
 };
 
@@ -419,6 +425,19 @@ const deleteFood = async (id) => {
 onMounted(() => {
   fetchFoods();
   fetchCategories();
+  if (foodModal.value) {
+    modalInstance.value = Modal.getOrCreateInstance(foodModal.value);
+    foodModal.value.addEventListener("hidden.bs.modal", handleModalHidden);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (foodModal.value) {
+    foodModal.value.removeEventListener("hidden.bs.modal", handleModalHidden);
+  }
+  if (modalInstance.value) {
+    modalInstance.value.dispose();
+  }
 });
 </script>
 
@@ -586,6 +605,19 @@ onMounted(() => {
 
 .upload-container input[type="file"] {
   display: none;
+}
+
+.upload-preview {
+  flex: 1;
+  width: 100%;
+  border: 2px dashed #0d6efd;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #0d6efd;
+  background-color: rgba(13, 110, 253, 0.05);
 }
 
 /* Pagination */

@@ -6,7 +6,7 @@
         </div>
 
         <div class="d-flex justify-content-end mb-4">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal">
+            <button type="button" class="btn btn-primary" @click="openAddModal">
                 + Add Category
             </button>
         </div>
@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, onBeforeUnmount } from 'vue';
 import axios from 'axios';
 import { Modal } from 'bootstrap';
 
@@ -112,6 +112,7 @@ const isEditing = ref(false);
 const categories = ref([]);
 const isLoading = ref(false);
 const categoryModal = ref(null);
+const modalInstance = ref(null);
 
 const fetchCategories = async () => {
     isLoading.value = true;
@@ -134,12 +135,22 @@ const resetForm = () => {
     isEditing.value = false;
 };
 
+const openAddModal = () => {
+    resetForm();
+    if (categoryModal.value) {
+        Modal.getOrCreateInstance(categoryModal.value).show();
+    }
+};
+
 const openEditModal = (category) => {
     resetForm();
     isEditing.value = true;
     form.id = category.id;
     form.name = category.name;
     form.description = category.description;
+    if (categoryModal.value) {
+        Modal.getOrCreateInstance(categoryModal.value).show();
+    }
 };
 
 const closeModal = () => {
@@ -151,12 +162,22 @@ const closeModal = () => {
         instance.hide();
     }
     resetForm();
+    // Safety cleanup in case the backdrop gets stuck.
+    document.body.classList.remove('modal-open');
+    document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.remove());
+};
+
+const handleModalHidden = () => {
+    if (!isSubmitting.value) {
+        resetForm();
+    }
 };
 
 const submitCategory = async () => {
     isSubmitting.value = true;
     errorMessage.value = '';
     successMessage.value = '';
+    let isSuccess = false;
 
     try {
         if (isEditing.value) {
@@ -175,18 +196,19 @@ const submitCategory = async () => {
         
         resetForm();
         await fetchCategories();
+        isSuccess = true;
         
-        setTimeout(() => {
-            closeModal();
-            setTimeout(() => {
-                successMessage.value = '';
-                errorMessage.value = '';
-            }, 300);
-        }, 1000);
     } catch (error) {
         errorMessage.value = error?.response?.data?.message || 'Failed to save category.';
     } finally {
         isSubmitting.value = false;
+    }
+    if (isSuccess) {
+        closeModal();
+        setTimeout(() => {
+            successMessage.value = '';
+            errorMessage.value = '';
+        }, 300);
     }
 };
 
@@ -201,7 +223,22 @@ const deleteCategory = async (id) => {
     }
 };
 
-onMounted(fetchCategories);
+onMounted(() => {
+    fetchCategories();
+    if (categoryModal.value) {
+        modalInstance.value = Modal.getOrCreateInstance(categoryModal.value);
+        categoryModal.value.addEventListener('hidden.bs.modal', handleModalHidden);
+    }
+});
+
+onBeforeUnmount(() => {
+    if (categoryModal.value) {
+        categoryModal.value.removeEventListener('hidden.bs.modal', handleModalHidden);
+    }
+    if (modalInstance.value) {
+        modalInstance.value.dispose();
+    }
+});
 </script>
 
 <style scoped>
