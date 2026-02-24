@@ -22,3 +22,27 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Lock files
+composer.lock
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build & Cache
+.vite/
+dist/
+coverage/
+.turbo/
+
+# Local env
+.env.local
+.env.*.local
+
+# IDE temp
+*.swp
+*.swo
+*~
+
+# OS
+.AppleDouble

@@ -5,6 +5,7 @@ import Dashboard from '@/components/Dashboard.vue';
 import Users from '@/Pages/Users.vue';
 import DashboardFood from '@/Pages/DashboardFood.vue';
 import Foods from '@/Pages/Foods.vue';
+import Category from '@/Pages/Category.vue';
 import { useAuthStore } from '@/stores/auth';
 
 const routes = [
@@ -13,6 +14,7 @@ const routes = [
   { path: '/users', component: Users, meta: { requiresAuth: true } },
   { path: '/dashboardfood', component: DashboardFood, meta: { requiresAuth: true } },
   { path: '/foods', component: Foods, meta: { requiresAuth: true } },
+  { path: '/category', component: Category, meta: { requiresAuth: true } },
   { path: '/', component: DashboardFood, meta: { requiresAuth: true } },
 ];
 
