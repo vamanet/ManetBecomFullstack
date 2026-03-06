@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FoodsController;
 use App\Http\Controllers\API\FoodCategoryController;
+use App\Http\Controllers\API\OrderController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -18,4 +19,8 @@ Route::apiResource('categories', FoodCategoryController::class);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    
+    // Order routes
+    Route::apiResource('orders', OrderController::class);
+    Route::get('/orders-statistics', [OrderController::class, 'statistics']);
 });
