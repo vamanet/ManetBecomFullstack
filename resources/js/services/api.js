@@ -14,6 +14,7 @@ export async function apiRequest(url, options = {}) {
     const error = await response.json();
     throw new Error(error.message || 'API Error');
   }
+  
 
   return response.json();
 }

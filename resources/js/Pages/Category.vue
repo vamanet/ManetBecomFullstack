@@ -15,7 +15,7 @@
         <div class="mt-4">
             <div v-if="isLoading" class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">Loading.......</span>
                 </div>
             </div>
             <div v-else-if="!categories.length" class="text-center py-5 bg-light rounded">
